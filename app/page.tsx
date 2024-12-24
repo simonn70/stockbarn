@@ -5,8 +5,8 @@ import { Header } from '@/components/Header'
 import { Hero } from '@/components/Hero'
 import { MiniCart } from '@/components/mini-cart'
 import { useCartStore } from '@/contexts/CardStore'
-import { useState } from 'react'
-
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 export const colors = {
   primary: '#4CAF50',
@@ -17,56 +17,35 @@ export const colors = {
   white: '#FFFFFF',
 }
 
-
-
-const products: Product[] = [
-  { 
-    id: 1, 
-    name: 'Organic Apples', 
-    price: 1.99, 
-    images: [
-      '/placeholder.svg?height=400&width=400&text=Apple+1',
-      '/placeholder.svg?height=400&width=400&text=Apple+2',
-      '/placeholder.svg?height=400&width=400&text=Apple+3'
-    ],
-    unit: 'per lb', 
-    category: 'Fruits & Veggies',
-    description: 'Fresh, crisp organic apples. Perfect for snacking, baking, or adding to your favorite recipes.',
-    nutrition: { calories: 95, protein: 0.5, carbs: 25, fat: 0.3 }
-  },
-  { 
-    id: 2, 
-    name: 'Ripe Bananas', 
-    price: 0.99, 
-    images: [
-      '/placeholder.svg?height=400&width=400&text=Banana+1',
-      '/placeholder.svg?height=400&width=400&text=Banana+2',
-      '/placeholder.svg?height=400&width=400&text=Banana+3'
-    ],
-    unit: 'per lb', 
-    category: 'Fruits & Veggies',
-    description: 'Sweet and creamy bananas, rich in potassium and perfect for smoothies or as a quick snack.',
-    nutrition: { calories: 105, protein: 1.3, carbs: 27, fat: 0.3 }
-  },
-  { 
-    id: 3, 
-    name: 'Fresh Milk', 
-    price: 2.49, 
-    images: [
-      '/placeholder.svg?height=400&width=400&text=Milk+1',
-      '/placeholder.svg?height=400&width=400&text=Milk+2',
-      '/placeholder.svg?height=400&width=400&text=Milk+3'
-    ],
-    unit: 'per gallon', 
-    category: 'Dairy & Eggs',
-    description: 'Creamy, farm-fresh milk. Rich in calcium and perfect for drinking, cooking, or baking.',
-    nutrition: { calories: 103, protein: 8, carbs: 12, fat: 2.4 }
-  },
-]
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  images: string[];
+  unit: string;
+  category: string;
+  description: string;
+  nutrition: string;
+}
 
 export default function Home() {
   const { addToCart } = useCartStore()
+  const [products, setProducts] = useState<Product[]>([])
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/product/`)
+        setProducts(response.data)
+      } catch (error) {
+        console.error('Error fetching products:', error)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
+  // Extract unique categories
   const categories = Array.from(new Set(products.map(p => p.category)))
 
   return (
@@ -81,7 +60,7 @@ export default function Home() {
               {products
                 .filter(product => product.category === category)
                 .map((product) => (
-                  <ProductCard key={product.id} product={product} onAddToCart={addToCart} />
+                  <ProductCard key={product._id} product={product} onAddToCart={addToCart} />
                 ))}
             </div>
           </section>
@@ -91,4 +70,3 @@ export default function Home() {
     </div>
   )
 }
-

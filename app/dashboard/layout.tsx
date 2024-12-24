@@ -59,6 +59,7 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
   const navigation = [
     { name: "Home", path: "/dashboard", icon: Home },
     { name: "Products", path: "/dashboard/products", icon: UserIcon },
+    { name: "Add Products", path: "/dashboard/products/create", icon: UserIcon },
     { name: "Orders", path: "/dashboard/orders", icon: Megaphone },
     { name: "customers", path: "/dashboard/customers", icon: Lightbulb },
   ];
