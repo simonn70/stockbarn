@@ -20,6 +20,7 @@ export const colors = {
 import { Plus, Minus, Trash2 } from 'lucide-react'
 import { useCartStore } from '@/contexts/CardStore'
 import { Header } from '@/components/Header'
+import axios from 'axios'
 
 
 export default function CartPage() {
@@ -51,10 +52,22 @@ export default function CartPage() {
     setUserDetails(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleCheckout = (e: React.FormEvent) => {
+  const handleCheckout = async(e: React.FormEvent) => {
     e.preventDefault()
     // Here you would typically send the order to your backend
     console.log('Order placed:', { items: cartItems, userDetails })
+    const data = {
+      products: cartItems, email:userDetails.email, contactNumber:userDetails.zipCode
+    }
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/orders/create`,
+       data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
     alert('Thank you for your order!')
     router.push('/')
   }
@@ -149,7 +162,7 @@ export default function CartPage() {
                       <Input id="city" name="city" value={userDetails.city} onChange={handleInputChange} required />
                     </div>
                     <div>
-                      <Label htmlFor="zipCode">Zip Code</Label>
+                      <Label htmlFor="zipCode">Phone Number</Label>
                       <Input id="zipCode" name="zipCode" value={userDetails.zipCode} onChange={handleInputChange} required />
                     </div>
                   </div>

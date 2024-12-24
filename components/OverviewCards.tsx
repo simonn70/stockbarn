@@ -1,6 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import axios from "axios"
 import { Package, ShoppingCart, Users } from 'lucide-react'
 import { useEffect, useState } from "react"
 
@@ -20,21 +21,16 @@ export default function OverviewCards() {
   })
 
   useEffect(() => {
-    // Simulating API call
-    const fetchData = async () => {
-      // Replace this with actual API call
-      const response = await new Promise<OverviewData>((resolve) =>
-        setTimeout(() => resolve({
-          totalOrders: 1234,
-          totalCustomers: 5678,
-          totalProducts: 90,
-          totalRevenue: 123456.78,
-        }), 1000)
-      )
-      setData(response)
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/product/stats`)
+        setData(response.data)
+      } catch (error) {
+        console.error('Error fetching products:', error)
+      }
     }
 
-    fetchData()
+    fetchProducts()
   }, [])
 
   return (

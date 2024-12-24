@@ -19,6 +19,7 @@ import {
 import { Eye } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 import axios from "axios"
+import { Header } from "@/components/Header"
 
 interface Order {
   id: number
@@ -70,9 +71,10 @@ export default function OrdersTable() {
   }
 
   return (
-    <div className="space-y-4">
+      <div className="space-y-4">
+          <Header/>
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold tracking-tight">Orders</h2>
+        <h2 className="text-2xl font-bold tracking-tight">My Orders</h2>
       </div>
       <div className="overflow-x-auto">
         <Table>

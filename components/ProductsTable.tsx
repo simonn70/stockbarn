@@ -13,6 +13,7 @@ import { Pencil, Trash } from 'lucide-react'
 import { useState, useEffect } from "react"
 import ProductModal from "./ProductModal"
 import Image from "next/image"
+import axios from "axios"
 
 interface Product {
   id: number
@@ -28,37 +29,59 @@ export default function ProductsTable() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
 
+  // fetcch
+
   useEffect(() => {
-    // Simulating API call
     const fetchProducts = async () => {
-      // Replace this with actual API call
-      const response = await new Promise<Product[]>((resolve) =>
-        setTimeout(() => resolve([
-          { id: 1, name: "Product 1", price: 19.99, category: "Category A", stock: 100, images: ["/placeholder.svg?height=100&width=100", "/placeholder.svg?height=100&width=100"] },
-          { id: 2, name: "Product 2", price: 29.99, category: "Category B", stock: 50, images: ["/placeholder.svg?height=100&width=100"] },
-          { id: 3, name: "Product 3", price: 39.99, category: "Category A", stock: 75, images: ["/placeholder.svg?height=100&width=100", "/placeholder.svg?height=100&width=100", "/placeholder.svg?height=100&width=100"] },
-        ]), 1000)
-      )
-      setProducts(response)
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/product/`)
+        setProducts(response.data)
+      } catch (error) {
+        console.error('Error fetching products:', error)
+      }
     }
 
     fetchProducts()
   }, [])
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = async(product: Product) => {
+    
     setEditingProduct(product)
     setIsModalOpen(true)
   }
 
   const handleDelete = async (id: number) => {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/product/${id}`,
+        
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
     // Replace this with actual API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setProducts(products.filter((product) => product.id !== id))
+    
+    setProducts(products.filter((product) => product._id !== id))
   }
 
   const handleSave = async (product: Product) => {
+
+    // send request to backend 
+    
+      // Send product data to the backend using axios
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/product/create`,
+        product,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
     // Replace this with actual API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+   
     if (product.id) {
       setProducts(products.map((p) => (p.id === product.id ? product : p)))
     } else {
@@ -110,7 +133,7 @@ export default function ProductsTable() {
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(product)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(product.id)}>
+                    <Button variant="ghost" size="icon" onClick={() => handleDelete(product._id)}>
                       <Trash className="h-4 w-4" />
                     </Button>
                   </div>

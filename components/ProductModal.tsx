@@ -1,46 +1,73 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useState, useEffect } from "react"
-import Image from "next/image"
-import { X } from 'lucide-react'
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { X } from "lucide-react";
+import axios from "axios";
 
 interface Product {
-  id?: number
-  name: string
-  price: number
-  category: string
-  stock: number
-  images: string[]
+  id?: number;
+  name: string;
+  price: number;
+  category: string;
+  stock: number;
+  images: string[];
 }
 
 interface ProductModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onSave: (product: Product) => void
-  product?: Product | null
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (product: Product) => void;
+  product?: Product | null;
 }
 
-export default function ProductModal({ isOpen, onClose, onSave, product }: ProductModalProps) {
+const url = `https://api.cloudinary.com/v1_1/dacotr4pz/auto/upload`;
+
+export const uploadFile = async (file: File) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "dev-2-win");
+
+  const response = await fetch(url, {
+    method: "post",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to upload file to Cloudinary.");
+  }
+
+  const responseData = await response.json();
+  return responseData.secure_url; // Returning the uploaded file's URL
+};
+
+export default function ProductModal({
+  isOpen,
+  onClose,
+  onSave,
+  product,
+}: ProductModalProps) {
   const [formData, setFormData] = useState<Product>({
     name: "",
     price: 0,
     category: "",
     stock: 0,
     images: [],
-  })
+  });
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (product) {
-      setFormData(product)
+      setFormData(product);
     } else {
       setFormData({
         name: "",
@@ -48,37 +75,71 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Produ
         category: "",
         stock: 0,
         images: [],
-      })
+      });
     }
-  }, [product])
+  }, [product]);
+
+  const handleFileUpload = async (files: FileList | null) => {
+    if (!files) return;
+
+    try {
+      setUploading(true);
+      const uploadedUrls = await Promise.all(
+        Array.from(files).map((file) => uploadFile(file))
+      );
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, ...uploadedUrls],
+      }));
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type } = e.target
+    const { name, value, type, files } = e.target;
+
     if (type === "file") {
-      const files = e.target.files
-      if (files) {
-        const newImages = Array.from(files).map(file => URL.createObjectURL(file))
-        setFormData(prev => ({ ...prev, images: [...prev.images, ...newImages] }))
-      }
+      handleFileUpload(files);
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         [name]: name === "price" || name === "stock" ? parseFloat(value) : value,
-      }))
+      }));
     }
-  }
+  };
 
   const handleRemoveImage = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       images: prev.images.filter((_, i) => i !== index),
-    }))
-  }
+    }));
+  };
+
+
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSave(formData)
-  }
+    e.preventDefault();
+    onSave(formData);
+  };
+   const handleEdit = async(e: React.FormEvent) => {
+    e.preventDefault();
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/product/${product._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+     );
+     if (response) {
+       alert("successfully edited")
+     }
+  };
+
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -142,10 +203,17 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Produ
               onChange={handleChange}
               multiple
             />
+            {uploading && <p>Uploading...</p>}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2">
               {formData.images.map((image, index) => (
                 <div key={index} className="relative">
-                  <Image src={image} alt={`Product image ${index + 1}`} width={100} height={100} className="rounded-md w-full h-auto" />
+                  <Image
+                    src={image}
+                    alt={`Product image ${index + 1}`}
+                    width={100}
+                    height={100}
+                    className="rounded-md w-full h-auto"
+                  />
                   <Button
                     type="button"
                     variant="destructive"
@@ -163,11 +231,10 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Produ
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Save</Button>
+            {product ? <Button  onClick={handleEdit}>Edit</Button> : <Button type="submit">Save</Button>}
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-

@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Eye } from 'lucide-react'
+import axios from "axios"
 
 interface Customer {
   id: number
@@ -39,21 +40,17 @@ export default function CustomersTable() {
   const [customerOrders, setCustomerOrders] = useState<Order[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  useEffect(() => {
-    // Simulating API call to fetch customers
-    const fetchCustomers = async () => {
-      // Replace this with actual API call
-      const response = await new Promise<Customer[]>((resolve) =>
-        setTimeout(() => resolve([
-          { id: 1, name: "John Doe", email: "john@example.com", totalOrders: 5, totalSpent: 500.00 },
-          { id: 2, name: "Jane Smith", email: "jane@example.com", totalOrders: 3, totalSpent: 300.00 },
-          { id: 3, name: "Bob Johnson", email: "bob@example.com", totalOrders: 7, totalSpent: 750.00 },
-        ]), 1000)
-      )
-      setCustomers(response)
+   useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/`)
+        setCustomers(response.data)
+      } catch (error) {
+        console.error('Error fetching products:', error)
+      }
     }
 
-    fetchCustomers()
+    fetchProducts()
   }, [])
 
   const handleViewOrders = async (customer: Customer) => {
@@ -82,7 +79,7 @@ export default function CustomersTable() {
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead className="hidden md:table-cell">Total Orders</TableHead>
-              <TableHead className="hidden md:table-cell">Total Spent</TableHead>
+              {/* <TableHead className="hidden md:table-cell">Total Spent</TableHead> */}
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -91,8 +88,8 @@ export default function CustomersTable() {
               <TableRow key={customer.id}>
                 <TableCell className="font-medium">{customer.name}</TableCell>
                 <TableCell>{customer.email}</TableCell>
-                <TableCell className="hidden md:table-cell">{customer.totalOrders}</TableCell>
-                <TableCell className="hidden md:table-cell">${customer.totalSpent.toFixed(2)}</TableCell>
+                {/* <TableCell className="hidden md:table-cell">{customer.totalOrders}</TableCell> */}
+                {/* <TableCell className="hidden md:table-cell">${customer.totalSpent.toFixed(2)}</TableCell> */}
                 <TableCell>
                   <Button variant="ghost" size="sm" onClick={() => handleViewOrders(customer)}>
                     <Eye className="h-4 w-4 mr-2" />

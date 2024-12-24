@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from 'next/navigation';
 
 export default function SignupForm() {
   const [name, setName] = useState('');
@@ -14,7 +15,7 @@ export default function SignupForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' }); // To display messages (success/error)
-
+  const router = useRouter()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage({ text: '', type: '' }); // Clear previous messages
@@ -37,6 +38,9 @@ export default function SignupForm() {
       setLoading(true);
       const response = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/register`, data);
       setMessage({ text: response.data.msg, type: 'success' }); // Display success message
+      if (response) {
+        router.push('/sign-in')
+      }
       console.log(response.data);
     } catch (error: any) {
       // Extract message from backend or use a default fallback
