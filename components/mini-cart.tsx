@@ -1,5 +1,7 @@
 import { ShoppingCart, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
+import { useAuth } from '../hook/useAuth'; // Importing the useAuth hook
+
 
 import Link from 'next/link'
 import { useCartStore } from '@/contexts/CardStore'
@@ -25,6 +27,16 @@ interface CartItem {
 export function MiniCart() {
   const { cartItems, removeFromCart } = useCartStore()
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const { isLoggedIn } = useAuth(); // Using the useAuth hook to check if the user is logged in
+
+  if (!isLoggedIn) {
+    return (
+      <div className="fixed bottom-4 right-4 w-80 bg-white rounded-lg shadow-lg p-4">
+        <h3 className="text-lg font-semibold">You need to log in to view your cart</h3>
+        <Button onClick={() => window.location.href = '/sign-in'}>Go to Login</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed bottom-4 right-4 w-80 bg-white rounded-lg shadow-lg p-4" style={{ borderColor: colors.primary, borderWidth: '2px' }}>

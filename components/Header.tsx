@@ -1,61 +1,123 @@
-import { ShoppingCart, Menu } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import Link from 'next/link'
-import { useCartStore } from '@/contexts/CardStore'
+import { useState, useEffect } from "react";
+import { ShoppingCart, Menu, X, LogOut } from "lucide-react"; // Import LogOut icon
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useCartStore } from "@/contexts/CardStore";
 
 export const colors = {
-  primary: '#4CAF50',
-  secondary: '#FFC107',
-  background: '#F5F5F5',
-  text: '#333333',
-  lightText: '#666666',
-  white: '#FFFFFF',
-}
+  primary: "#4CAF50",
+  secondary: "#FFC107",
+  background: "#F5F5F5",
+  text: "#333333",
+  lightText: "#666666",
+  white: "#FFFFFF",
+};
 
-
-
-const categories = ['Fruits & Veggies', 'Dairy & Eggs', 'Bakery', 'Meat & Fish', 'Pantry']
+const categories = ["Fruits & Veggies", "Dairy & Eggs", "Bakery", "Meat & Fish", "Pantry"];
 
 export function Header() {
-  const cartCount = useCartStore(state => state.cartCount)
+  const cartCount = useCartStore((state) => state.cartCount);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if there's a token in localStorage
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token); // Set the authenticated state based on the presence of a token
+  }, []);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleLogout = () => {
+    // Remove the token from localStorage on logout
+    localStorage.removeItem("token");
+    setIsAuthenticated(false); // Update the state to reflect the user is logged out
+  };
 
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold" style={{ color: colors.primary }}>
             Fresh Groceries
           </Link>
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost">
-              <Menu className="h-6 w-6" />
+          <div className="flex items-center space-x-4 lg:hidden">
+            <Button variant="ghost" onClick={toggleMenu}>
+              {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
-            <Link href="/cart" passHref>
-              <Button variant="outline" className="relative" style={{ borderColor: colors.primary, color: colors.primary }}>
-                <ShoppingCart className="h-6 w-6" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                    {cartCount}
-                  </span>
-                )}
-              </Button>
-            </Link>
+          </div>
+          <div className="hidden lg:flex items-center space-x-4">
+            {!isAuthenticated ? (
+              <>
+                <Link href="/sign-in">
+                  <Button variant="outline" style={{ borderColor: colors.primary, color: colors.primary }}>
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/sign-up">
+                  <Button style={{ backgroundColor: colors.primary, color: colors.white }}>
+                    Sign Up
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/dashboard/products/create" passHref>
+                  <Button variant="outline" className="relative" style={{ borderColor: colors.primary, color: colors.primary }}>
+                    <ShoppingCart className="h-6 w-6" />
+                    {cartCount > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                        {cartCount}
+                      </span>
+                    )}
+                  </Button>
+                </Link>
+                <Button onClick={handleLogout} variant="outline" style={{ borderColor: colors.primary, color: colors.primary }}>
+                  <LogOut className="h-6 w-6" />
+                </Button>
+              </>
+            )}
           </div>
         </div>
-        <nav className="flex justify-between items-center overflow-x-auto">
-          {categories.map((category) => (
-            <Link
-              key={category}
-              href={`#${category.toLowerCase().replace(/\s+/g, '-')}`}
-              className="text-sm font-medium whitespace-nowrap px-3 py-2 rounded-full transition-colors"
-              style={{ color: colors.text, backgroundColor: colors.background }}
-            >
-              {category}
-            </Link>
-          ))}
-        </nav>
+        {menuOpen && (
+          <div className="lg:hidden bg-white shadow-lg rounded-md mt-2 p-4 space-y-4">
+            <nav className="flex flex-col space-y-2">
+              {categories.map((category) => (
+                <Link
+                  key={category}
+                  href={`#${category.toLowerCase().replace(/\s+/g, "-")}`}
+                  className="text-sm font-medium"
+                  style={{ color: colors.text }}
+                >
+                  {category}
+                </Link>
+              ))}
+            </nav>
+            <div className="flex flex-col space-y-2">
+              {!isAuthenticated ? (
+                <>
+                  <Link href="/sign-in">
+                    <Button variant="outline" style={{ borderColor: colors.primary, color: colors.primary }} className="w-full">
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link href="/sign-up">
+                    <Button style={{ backgroundColor: colors.primary, color: colors.white }} className="w-full">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <Button onClick={handleLogout} variant="outline" className="w-full" style={{ borderColor: colors.primary, color: colors.primary }}>
+                  Log Out
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </header>
-  )
+  );
 }
-
