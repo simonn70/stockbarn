@@ -31,9 +31,15 @@ export default function LoginForm() {
 
       // Store the token in localStorage (or cookies)
       localStorage.setItem('token', response.data.token)
+      console.log(response.data.user.role)
 
-      // Redirect to the dashboard
-      router.push('/')
+      if (response.data.user.role === 'admin'){
+        router.push('/dashboard')
+      }
+      else {
+        router.push('/')
+      }
+
     } catch (error: any) {
       const errorMsg = error.response?.data?.msg || 'Login failed. Please try again.'
       setMessage({ text: errorMsg, type: 'error' })
