@@ -48,12 +48,12 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
 
   const handleSessionExpiredLogout = () => {
     setIsSessionExpired(false);
-    router.push("/login");
+    router.push("/");
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    router.push("/login");
+    router.push("/");
   };
 
   const navigation = [

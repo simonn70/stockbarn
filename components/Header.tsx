@@ -64,7 +64,7 @@ export function Header() {
               </>
             ) : (
               <>
-                <Link href="/dashboard/products/create" passHref>
+                <Link href="/cart" passHref>
                   <Button variant="outline" className="relative" style={{ borderColor: colors.primary, color: colors.primary }}>
                     <ShoppingCart className="h-6 w-6" />
                     {cartCount > 0 && (
