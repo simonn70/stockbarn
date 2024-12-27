@@ -73,7 +73,7 @@ export function MiniCart() {
           ) : (
             <>
               <ul className="max-h-60 overflow-auto mb-4">
-                {cartItems.map((item: any) => (
+                {cartItems.map((item) => (
                   <li key={item.id} className="flex justify-between items-center mb-2">
                     <div>
                       <p className="font-medium" style={{ color: colors.text }}>

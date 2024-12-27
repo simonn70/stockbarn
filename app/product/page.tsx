@@ -21,6 +21,15 @@ import { Header } from '@/components/Header'
 import { useCartStore } from '@/contexts/CardStore'
 import useTokenStore from '@/lib/store'
 
+interface Product {
+  name: string; // Name of the product
+  category: string; // Category the product belongs to
+  description: string; // Description of the product
+  price: number; // Price of the product
+  stock: number; // Available stock of the product
+  quantity: number; // Quantity selected or purchased
+  images: string[]; // Array of image URLs for the product
+}
 
 // const products = [
 //   { 
@@ -69,9 +78,20 @@ import useTokenStore from '@/lib/store'
 
 
 export default function ProductPage() {
-  const {datas}= useTokenStore()
+  const {product}= useTokenStore()
   // const params = useParams()
-  const [product] = useState<any>(datas)
+ const defaultProduct: Product = {
+  name: "",
+  category: "",
+  description: "",
+  price: 0,
+  stock: 0,
+  quantity: 0,
+  images: [], // Empty array to avoid issues with indexing
+};
+
+// Use `datas` if available, otherwise fall back to `defaultProduct`
+// const [product] = useState<Product>(datas );
   const [quantity, setQuantity] = useState(1)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const { addToCart } = useCartStore()
@@ -104,8 +124,8 @@ export default function ProductPage() {
           <div className="md:w-1/2">
             <div className="relative">
               <Image
-                src={product.images[currentImageIndex]}
-                alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                src={product?.images[currentImageIndex]}
+                alt={`${product?.name} - Image ${currentImageIndex + 1}`}
                 width={400}
                 height={400}
                 layout="responsive"
@@ -133,7 +153,7 @@ export default function ProductPage() {
               </div>
             </div>
             <div className="flex justify-center mt-4">
-              {product.images.map((image, index) => (
+              {product?.images?.map((image, index) => (
                 <button
                   key={index}
                   className={`w-16 h-16 mx-1 rounded-md overflow-hidden ${
@@ -143,7 +163,7 @@ export default function ProductPage() {
                 >
                   <Image
                     src={image}
-                    alt={`${product.name} - Thumbnail ${index + 1}`}
+                    alt={`${product?.name} - Thumbnail ${index + 1}`}
                     width={64}
                     height={64}
                     objectFit="cover"
@@ -153,15 +173,15 @@ export default function ProductPage() {
             </div>
           </div>
           <CardContent className="md:w-1/2 p-6">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: colors.text }}>{product.name}</h1>
-            <p className="text-xl font-semibold mb-4" style={{ color: colors.primary }}>₵{product.price.toFixed(2)} {product.unit}</p>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: colors.text }}>{product?.name}</h1>
+            <p className="text-xl font-semibold mb-4" style={{ color: colors.primary }}>₵{product?.price?.toFixed(2)} {product?.unit}</p>
             {/* <div className="flex items-center mb-4">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 fill-current" style={{ color: colors.secondary }} />
               ))}
               <span className="ml-2" style={{ color: colors.lightText }}>4.5 (123 reviews)</span>
             </div> */}
-            <p className="mb-4" style={{ color: colors.text }}>{product.description}</p>
+            <p className="mb-4" style={{ color: colors.text }}>{product?.description}</p>
             {/*  */}
             <div className="flex items-center mb-4">
               <Button
