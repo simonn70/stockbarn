@@ -1,45 +1,52 @@
 import { create } from 'zustand'
-import { Product } from '../types/product'
+import { persist } from 'zustand/middleware'
 
-interface CartItem extends Product {
-  quantity: number
-}
+
 
 interface CartStore {
-  cartItems: CartItem[]
+  cartItems: any
   cartCount: number
-  addToCart: (product: Product, quantity: number) => void
+  addToCart: (product: any, quantity: number) => void
   removeFromCart: (id: number) => void
   clearCart: () => void
 }
 
-export const useCartStore = create<CartStore>((set) => ({
-  cartItems: [],
-  cartCount: 0,
-  addToCart: (product, quantity) => set((state) => {
-    const existingItem = state.cartItems.find(item => item.id === product.id)
-    let newCartItems: CartItem[]
+export const useCartStore = create<any>()(
+  persist(
+    (set) => ({
+      cartItems: [],
+      cartCount: 0,
+      addToCart: (product, quantity) =>
+        set((state) => {
+          const existingItem = state.cartItems.find((item) => item.id === product.id)
+          let newCartItems:any
 
-    if (existingItem) {
-      newCartItems = state.cartItems.map(item =>
-        item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
-      )
-    } else {
-      newCartItems = [...state.cartItems, { ...product, quantity }]
-    }
+          if (existingItem) {
+            newCartItems = state.cartItems.map((item) =>
+              item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+            )
+          } else {
+            newCartItems = [...state.cartItems, { ...product, quantity }]
+          }
 
-    return {
-      cartItems: newCartItems,
-      cartCount: newCartItems.reduce((sum, item) => sum + item.quantity, 0)
+          return {
+            cartItems: newCartItems,
+            cartCount: newCartItems.reduce((sum, item) => sum + item.quantity, 0),
+          }
+        }),
+      removeFromCart: (id) =>
+        set((state) => {
+          const newCartItems = state.cartItems.filter((item) => item.id !== id)
+          return {
+            cartItems: newCartItems,
+            cartCount: newCartItems.reduce((sum, item) => sum + item.quantity, 0),
+          }
+        }),
+      clearCart: () => set({ cartItems: [], cartCount: 0 }),
+    }),
+    {
+      name: 'cart-storage', // unique name for the localStorage key
+      partialize: (state) => ({ cartItems: state.cartItems, cartCount: state.cartCount }), // optionally store only part of the state
     }
-  }),
-  removeFromCart: (id) => set((state) => {
-    const newCartItems = state.cartItems.filter(item => item.id !== id)
-    return {
-      cartItems: newCartItems,
-      cartCount: newCartItems.reduce((sum, item) => sum + item.quantity, 0)
-    }
-  }),
-  clearCart: () => set({ cartItems: [], cartCount: 0 }),
-}))
-
+  )
+)

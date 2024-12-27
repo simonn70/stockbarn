@@ -37,8 +37,8 @@ interface OrderItem {
 }
 
 export default function OrdersTable() {
-  const [orders, setOrders] = useState<Order[]>([])
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+  const [orders, setOrders] = useState<any>([])
+  const [selectedOrder, setSelectedOrder] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
    useEffect(() => {
@@ -53,6 +53,22 @@ export default function OrdersTable() {
 
     fetchProducts()
   }, [])
+const handleDeliverOrder = async (orderId: number) => {
+  try {
+    const response = await axios.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/orders/${orderId}/deliver`);
+    // Update the local state to reflect the status change
+    setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.id === orderId ? { ...order, status: "delivered" } : order
+      )
+    );
+    setIsModalOpen(false); // Close the modal after updating
+    alert("Order marked as delivered successfully!");
+  } catch (error) {
+    console.error("Error delivering order:", error);
+    alert("Failed to mark the order as delivered. Please try again.");
+  }
+};
 
   const handleViewOrder = (order: Order) => {
     setSelectedOrder(order)
@@ -89,9 +105,9 @@ export default function OrdersTable() {
           <TableBody>
             {orders.map((order) => (
               <TableRow key={order.id}>
-                <TableCell className="font-medium">{order.id}</TableCell>
-                <TableCell>{order.customerName}</TableCell>
-                <TableCell className="hidden md:table-cell">{order.date}</TableCell>
+                <TableCell className="font-medium">{order._id}</TableCell>
+                <TableCell>{order.customer?.name}</TableCell>
+                <TableCell className="hidden md:table-cell">{order.createdAt}</TableCell>
                 {/* <TableCell>${order.total.toFixed(2)}</TableCell> */}
                 <TableCell>{getStatusBadge(order.status)}</TableCell>
                 <TableCell>
@@ -115,19 +131,27 @@ export default function OrdersTable() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="font-semibold">Order ID:</p>
-                  <p>{selectedOrder.id}</p>
+                  <p>{selectedOrder._id}</p>
                 </div>
                 <div>
                   <p className="font-semibold">Customer:</p>
-                  <p>{selectedOrder.customerName}</p>
+                  <p>{selectedOrder.customer.name}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Mobile Number:</p>
+                  <p>{selectedOrder.customer.phoneNumber}</p>
                 </div>
                 <div>
                   <p className="font-semibold">Date:</p>
-                  <p>{selectedOrder.date}</p>
+                  <p>{selectedOrder.createdAt}</p>
                 </div>
                 <div>
                   <p className="font-semibold">Status:</p>
                   <p>{getStatusBadge(selectedOrder.status)}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Payment Status:</p>
+                  <p>{getStatusBadge(selectedOrder.paymentStatus)}</p>
                 </div>
               </div>
               <Table>
@@ -140,18 +164,21 @@ export default function OrdersTable() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {selectedOrder.items.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell>{item.name}</TableCell>
+                  {selectedOrder?.products?.map((item) => (
+                    <TableRow key={item.product._id}>
+                      <TableCell>{item.product.name}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
-                      <TableCell>${item.price.toFixed(2)}</TableCell>
-                      <TableCell>${(item.quantity * item.price).toFixed(2)}</TableCell>
+                      <TableCell> ₵{item?.product?.price?.toFixed(2)}</TableCell>
+                      <TableCell> ₵{(item.quantity * item.product.price)?.toFixed(2)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
+                  <Button  size="sm" onClick={() => selectedOrder && handleDeliverOrder(selectedOrder._id)}>
+                    Deliver
+                  </Button>
               </Table>
               <div className="text-right">
-                <p className="font-semibold">Total: ${selectedOrder.total.toFixed(2)}</p>
+               
               </div>
             </div>
           )}

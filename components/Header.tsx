@@ -41,16 +41,18 @@ export function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold" style={{ color: colors.primary }}>
-            Fresh Groceries
+            StockBarns
           </Link>
+          {isAuthenticated && <Link href="/my-orders"> <h1 className=" text-gray-500 cursor-pointer">My Orders</h1></Link>}
           <div className="flex items-center space-x-4 lg:hidden">
             <Button variant="ghost" onClick={toggleMenu}>
               {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
+           
           </div>
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className=" lg:flex items-center space-x-4">
             {!isAuthenticated ? (
-              <>
+              <div className=" space-x-2">
                 <Link href="/sign-in">
                   <Button variant="outline" style={{ borderColor: colors.primary, color: colors.primary }}>
                     Sign In
@@ -61,7 +63,7 @@ export function Header() {
                     Sign Up
                   </Button>
                 </Link>
-              </>
+              </div>
             ) : (
               <>
                 <Link href="/cart" passHref>
@@ -74,7 +76,7 @@ export function Header() {
                     )}
                   </Button>
                 </Link>
-                <Button onClick={handleLogout} variant="outline" style={{ borderColor: colors.primary, color: colors.primary }}>
+                <Button onClick={handleLogout} className="hidden sm:block" variant="outline" style={{ borderColor: colors.primary, color: colors.primary }}>
                   <LogOut className="h-6 w-6" />
                 </Button>
               </>

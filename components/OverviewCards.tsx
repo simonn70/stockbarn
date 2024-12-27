@@ -80,7 +80,7 @@ export default function OverviewCards() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            ${data.totalRevenue.toFixed(2)}
+             ₵{data.totalRevenue.toFixed(2)}
           </div>
         </CardContent>
       </Card>

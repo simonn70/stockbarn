@@ -33,7 +33,7 @@ export default function CartPage() {
     city: '',
     zipCode: '',
   })
-
+const token = localStorage.getItem('token');
   const updateQuantity = (id: number, newQuantity: number) => {
     const item = cartItems.find(item => item.id === id)
     if (item) {
@@ -52,25 +52,51 @@ export default function CartPage() {
     setUserDetails(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleCheckout = async(e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically send the order to your backend
-    console.log('Order placed:', { items: cartItems, userDetails })
+ 
+const handleCheckout = async (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  try {
+    // Gather data for the order
     const data = {
-      products: cartItems, email:userDetails.email, contactNumber:userDetails.zipCode
+      products: cartItems,
+      email: userDetails.email,
+      contactNumber: userDetails.zipCode,
+      paymentMethod: "card",
+      deliveryLocation:userDetails.address
+    };
+    
+    // Retrieve the token
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('User not authenticated. Please log in.');
     }
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/orders/create`,
-       data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    alert('Thank you for your order!')
-    router.push('/')
+
+    // Send the order to the backend
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/orders/create`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+        },
+      }
+    );
+
+    // Extract the Paystack URL from the response
+  
+    if (response.data) {
+    window.location.href = response.data.paymentUrl
+   }
+
+    // Route to the Paystack payment URL
+    // window.location.href = response.data.paystactUrl; // Redirects to the Paystack payment page
+  } catch (error) {
+    console.error('Error during checkout:', error);
+    alert('Something went wrong. Please try again.');
   }
+};
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
@@ -90,12 +116,12 @@ export default function CartPage() {
                 </CardHeader>
                 <CardContent>
                   {cartItems.map(item => (
-                    <div key={item.id} className="flex items-center justify-between py-4 border-b">
+                    <div key={item._id} className="flex items-center justify-between py-4 border-b">
                       <div className="flex items-center">
                         <img src={item.images[0]} alt={item.name} className="w-16 h-16 object-cover rounded mr-4" />
                         <div>
                           <h3 className="font-semibold" style={{ color: colors.text }}>{item.name}</h3>
-                          <p style={{ color: colors.lightText }}>${item.price.toFixed(2)} each</p>
+                          <p style={{ color: colors.lightText }}>₵{item.price.toFixed(2)} each</p>
                         </div>
                       </div>
                       <div className="flex items-center">
@@ -131,7 +157,7 @@ export default function CartPage() {
                 <CardFooter>
                   <div className="flex justify-between items-center w-full">
                     <span className="font-semibold" style={{ color: colors.text }}>Total:</span>
-                    <span className="font-bold text-xl" style={{ color: colors.primary }}>${total.toFixed(2)}</span>
+                    <span className="font-bold text-xl" style={{ color: colors.primary }}>₵{total.toFixed(2)}</span>
                   </div>
                 </CardFooter>
               </Card>
@@ -145,16 +171,16 @@ export default function CartPage() {
               <CardContent>
                 <form onSubmit={handleCheckout}>
                   <div className="space-y-4">
-                    <div>
+                    {/* <div>
                       <Label htmlFor="name">Name</Label>
                       <Input id="name" name="name" value={userDetails.name} onChange={handleInputChange} required />
-                    </div>
+                    </div> */}
                     <div>
                       <Label htmlFor="email">Email</Label>
                       <Input id="email" name="email" type="email" value={userDetails.email} onChange={handleInputChange} required />
                     </div>
                     <div>
-                      <Label htmlFor="address">Address</Label>
+                      <Label htmlFor="address">Delvery Address</Label>
                       <Input id="address" name="address" value={userDetails.address} onChange={handleInputChange} required />
                     </div>
                     <div>

@@ -1,31 +1,3 @@
-// import { create } from "zustand";
-// interface TokenState {
-//   token: string | null;
-//   userType: any;
-//   name: any;
-//   setToken: (token: string, userType: any, name: any) => void;
-//   clearToken: () => void;
-// }
-
-// const useTokenStore = create<TokenState>((set) => ({
-//   token: localStorage.getItem("token") || null,
-//   name: localStorage.getItem("name") || null,
-//   userType: localStorage.getItem("userType") || null,
-//   setToken: (token: string, userType: any, name: any) => {
-//     localStorage.setItem("token", token);
-//     localStorage.setItem("userType", userType);
-//     localStorage.setItem("name", name);
-//     set({ token, userType, name });
-//   },
-//   clearToken: () => {
-//     localStorage.removeItem("token");
-//     localStorage.removeItem("userType");
-//     set({ token: null, userType: null });
-//   },
-// }));
-
-// export default useTokenStore;
-
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -38,6 +10,8 @@ interface TokenState {
   datas: any;
   setToken: (token: string, userType: UserType, name: any, datas: any) => void;
   clearToken: () => void;
+  setDatas: (datas: any) => void;
+ // Added function to set datas
 }
 
 const useTokenStore = create<TokenState>()(
@@ -49,15 +23,8 @@ const useTokenStore = create<TokenState>()(
       datas: [],
       setToken: (token: string, userType: UserType, name: any, datas: any) =>
         set({ token, userType, name, datas }),
-      clearToken: () => set({ token: null }),
-      setUserType: (userType: UserType) => {
-        // Ensure non-null values
-        set({ userType });
-      },
-      setNames: (name: any) => {
-        // Ensure non-null values
-        set({ name });
-      },
+      clearToken: () => set({ token: null, userType: null, name: null, datas: [] }),
+      setDatas: (datas: any) => set({ datas }), // Implementation of setDatas
     }),
     {
       name: "token-storage", // name of the item in localStorage

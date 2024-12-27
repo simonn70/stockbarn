@@ -25,7 +25,7 @@ interface Product {
 }
 
 export default function ProductsTable() {
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<any>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
 

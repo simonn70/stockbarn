@@ -19,9 +19,10 @@ import Image from 'next/image'
 import { Star, Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { useCartStore } from '@/contexts/CardStore'
+import useTokenStore from '@/lib/store'
 
 
-const products: Product[] = [
+const products = [
   { 
     id: 1, 
     name: 'Organic Apples', 
@@ -68,23 +69,17 @@ const products: Product[] = [
 
 
 export default function ProductPage() {
+  const {datas}= useTokenStore()
   const params = useParams()
-  const [product, setProduct] = useState<Product | null>(null)
+  const [product, setProduct] = useState<any>(datas)
   const [quantity, setQuantity] = useState(1)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const { addToCart } = useCartStore()
 
-  useEffect(() => {
-    const productId = Number(params.id)
-    const foundProduct = products.find(p => p.id === productId)
-    if (foundProduct) {
-      setProduct(foundProduct)
-    }
-  }, [params.id])
-
-  if (!product) {
-    return <div>Product not found</div>
-  }
+ 
+  // if (!product) {
+  //   return <div>Product not found</div>
+  // }
 
   const handleAddToCart = () => {
     if (product) {
@@ -159,21 +154,15 @@ export default function ProductPage() {
           </div>
           <CardContent className="md:w-1/2 p-6">
             <h1 className="text-3xl font-bold mb-2" style={{ color: colors.text }}>{product.name}</h1>
-            <p className="text-xl font-semibold mb-4" style={{ color: colors.primary }}>${product.price.toFixed(2)} {product.unit}</p>
-            <div className="flex items-center mb-4">
+            <p className="text-xl font-semibold mb-4" style={{ color: colors.primary }}>₵{product.price.toFixed(2)} {product.unit}</p>
+            {/* <div className="flex items-center mb-4">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 fill-current" style={{ color: colors.secondary }} />
               ))}
               <span className="ml-2" style={{ color: colors.lightText }}>4.5 (123 reviews)</span>
-            </div>
+            </div> */}
             <p className="mb-4" style={{ color: colors.text }}>{product.description}</p>
-            <h2 className="text-xl font-semibold mb-2" style={{ color: colors.text }}>Nutrition Information</h2>
-            <ul className="mb-6" style={{ color: colors.lightText }}>
-              <li>Calories: {product.nutrition.calories}</li>
-              <li>Protein: {product.nutrition.protein}g</li>
-              <li>Carbs: {product.nutrition.carbs}g</li>
-              <li>Fat: {product.nutrition.fat}g</li>
-            </ul>
+            {/*  */}
             <div className="flex items-center mb-4">
               <Button
                 size="sm"

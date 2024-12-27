@@ -55,7 +55,7 @@ export default function ProductModal({
   onClose,
   onSave,
   product,
-}: ProductModalProps) {
+}: any) {
   const [formData, setFormData] = useState<Product>({
     name: "",
     price: 0,
