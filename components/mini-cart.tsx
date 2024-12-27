@@ -80,7 +80,7 @@ export function MiniCart() {
                         {item.name}
                       </p>
                       <p className="text-sm" style={{ color: colors.lightText }}>
-                        {item.quantity} x ${item.price.toFixed(2)}
+                        {item.quantity} x ₵{item.price.toFixed(2)}
                       </p>
                     </div>
                     <Button
@@ -98,7 +98,7 @@ export function MiniCart() {
                   Total:
                 </p>
                 <p className="font-bold" style={{ color: colors.primary }}>
-                  ${total.toFixed(2)}
+                  ₵{total.toFixed(2)}
                 </p>
               </div>
               <Link href="/cart" passHref>

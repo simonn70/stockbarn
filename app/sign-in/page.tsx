@@ -9,11 +9,9 @@ export default function Home() {
   const [isLogin, setIsLogin] = useState(true)
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <div className="w-full max-w-md">
-        <h1 className="text-4xl font-bold text-center mb-8">
-          {/* {isLogin ? 'Login' : 'Sign Up'} */}
-        </h1>
+    <main className="flex min-h-screen flex-col items-center justify-center ">
+      <div className="w-full ">
+        
         {isLogin ? <LoginForm/> : <SignupForm />}
         <p className="text-center mt-4">
           {/* {isLogin ? "Don't have an account? " : "Already have an account? "} */}
