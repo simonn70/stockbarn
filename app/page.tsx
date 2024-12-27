@@ -8,7 +8,7 @@ import { useCartStore } from '@/contexts/CardStore'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-export const colors = {
+ const colors = {
   primary: '#4CAF50',
   secondary: '#FFC107',
   background: '#F5F5F5',
