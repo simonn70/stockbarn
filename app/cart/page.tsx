@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-export const colors = {
+ const colors = {
   primary: '#4CAF50',
   secondary: '#FFC107',
   background: '#F5F5F5',
