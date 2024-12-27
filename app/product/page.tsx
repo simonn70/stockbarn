@@ -5,7 +5,7 @@ import { useState} from 'react'
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-export const colors = {
+ const colors = {
   primary: '#4CAF50',
   secondary: '#FFC107',
   background: '#F5F5F5',
