@@ -70,8 +70,8 @@ const products = [
 
 export default function ProductPage() {
   const {datas}= useTokenStore()
-  const params = useParams()
-  const [product, setProduct] = useState<any>(datas)
+  // const params = useParams()
+  const [product] = useState<any>(datas)
   const [quantity, setQuantity] = useState(1)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const { addToCart } = useCartStore()

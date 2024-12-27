@@ -21,6 +21,7 @@ interface Product {
   category: string;
   stock: number;
   images: string[];
+  description: string;
 }
 
 interface ProductModalProps {
@@ -56,12 +57,13 @@ export default function ProductModal({
   onSave,
   product,
 }: any) {
-  const [formData, setFormData] = useState<Product>({
+  const [formData, setFormData] = useState<any>({
     name: "",
     price: 0,
     category: "",
     stock: 0,
     images: [],
+    description: "",
   });
   const [uploading, setUploading] = useState(false);
 
@@ -75,6 +77,7 @@ export default function ProductModal({
         category: "",
         stock: 0,
         images: [],
+        description: "",
       });
     }
   }, [product]);
@@ -98,7 +101,7 @@ export default function ProductModal({
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e:any) => {
     const { name, value, type, files } = e.target;
 
     if (type === "file") {
@@ -192,6 +195,18 @@ export default function ProductModal({
                 required
               />
             </div>
+             <div>
+            <Label htmlFor="description">Description</Label>
+            <textarea
+              id="description"
+              name="description"
+              className="w-full border border-gray-300 rounded-md p-2"
+              
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
           </div>
           <div>
             <Label htmlFor="images">Product Images</Label>

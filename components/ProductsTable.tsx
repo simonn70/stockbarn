@@ -51,7 +51,7 @@ export default function ProductsTable() {
   }
 
   const handleDelete = async (id: number) => {
-      const response = await axios.delete(
+      await axios.delete(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/product/${id}`,
         
         {
@@ -125,7 +125,7 @@ export default function ProductsTable() {
                   </div>
                 </TableCell>
                 <TableCell className="font-medium">{product.name}</TableCell>
-                <TableCell>${product.price.toFixed(2)}</TableCell>
+                <TableCell>₵{product.price.toFixed(2)}</TableCell>
                 <TableCell className="hidden md:table-cell">{product.category}</TableCell>
                 <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
                 <TableCell>

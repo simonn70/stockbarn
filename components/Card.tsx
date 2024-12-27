@@ -8,21 +8,18 @@ import { useAuth } from "../hook/useAuth"; // Importing the useAuth hook
 import useTokenStore from "@/lib/store";
 import { useRouter } from "next/navigation";
 
-interface ProductCardProps {
-  product: Product;
-  onAddToCart: (product: Product, quantity: number) => void;
-}
 
-interface Product {
-  _id: string; // Use _id here to match the Home component's Product interface
-  name: string;
-  price: number;
-  stock: number;
-  images: string[];
-  unit: string;
-  category: string;
-  description: string;
-}
+
+// interface Product {
+//   _id: string; // Use _id here to match the Home component's Product interface
+//   name: string;
+//   price: number;
+//   stock: number;
+//   images: string[];
+//   unit: string;
+//   category: string;
+//   description: string;
+// }
 
 export function ProductCard({ product, onAddToCart }: any) {
   const [quantity, setQuantity] = useState(0);

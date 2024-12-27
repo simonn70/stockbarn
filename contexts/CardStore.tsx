@@ -18,7 +18,7 @@ export const useCartStore = create<any>()(
       cartCount: 0,
       addToCart: (product, quantity) =>
         set((state) => {
-          const existingItem = state.cartItems.find((item) => item.id === product.id)
+          const existingItem = state.cartItems.find((item) => item._id === product._id)
           let newCartItems:any
 
           if (existingItem) {
@@ -36,7 +36,7 @@ export const useCartStore = create<any>()(
         }),
       removeFromCart: (id) =>
         set((state) => {
-          const newCartItems = state.cartItems.filter((item) => item.id !== id)
+          const newCartItems = state.cartItems.filter((item) => item._id !== id)
           return {
             cartItems: newCartItems,
             cartCount: newCartItems.reduce((sum, item) => sum + item.quantity, 0),

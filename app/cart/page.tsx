@@ -24,7 +24,7 @@ import axios from 'axios'
 
 
 export default function CartPage() {
-  const router = useRouter()
+  // const router = useRouter()
   const { cartItems, addToCart, removeFromCart } = useCartStore()
   const [userDetails, setUserDetails] = useState({
     name: '',
@@ -33,7 +33,7 @@ export default function CartPage() {
     city: '',
     zipCode: '',
   })
-const token = localStorage.getItem('token');
+// const token = localStorage.getItem('token');
   const updateQuantity = (id: number, newQuantity: number) => {
     const item = cartItems.find(item => item.id === id)
     if (item) {
@@ -128,7 +128,7 @@ const handleCheckout = async (e: React.FormEvent) => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item._id, item.quantity - 1)}
                           style={{ borderColor: colors.primary, color: colors.primary }}
                         >
                           <Minus className="h-4 w-4" />
@@ -145,7 +145,7 @@ const handleCheckout = async (e: React.FormEvent) => {
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => removeFromCart(item.id)}
+                          onClick={() => removeFromCart(item._id)}
                           className="ml-4"
                         >
                           <Trash2 className="h-4 w-4" style={{ color: colors.primary }} />

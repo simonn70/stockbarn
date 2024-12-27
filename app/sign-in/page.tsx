@@ -12,11 +12,11 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <div className="w-full max-w-md">
         <h1 className="text-4xl font-bold text-center mb-8">
-          {isLogin ? 'Login' : 'Sign Up'}
+          {/* {isLogin ? 'Login' : 'Sign Up'} */}
         </h1>
         {isLogin ? <LoginForm/> : <SignupForm />}
         <p className="text-center mt-4">
-          {isLogin ? "Don't have an account? " : "Already have an account? "}
+          {/* {isLogin ? "Don't have an account? " : "Already have an account? "} */}
           <button
             onClick={() => setIsLogin(!isLogin)}
             className="text-blue-500 hover:underline"

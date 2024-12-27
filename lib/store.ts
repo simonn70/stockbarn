@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, PersistOptions } from "zustand/middleware";
 
 type UserType = "admin" | "customer" | null;
 
@@ -11,11 +11,23 @@ interface TokenState {
   setToken: (token: string, userType: UserType, name: any, datas: any) => void;
   clearToken: () => void;
   setDatas: (datas: any) => void;
- // Added function to set datas
 }
 
+const localStorageWrapper = {
+  getItem: (name: string) => {
+    const storedValue = localStorage.getItem(name);
+    return storedValue ? JSON.parse(storedValue) : null;
+  },
+  setItem: (name: string, value: any) => {
+    localStorage.setItem(name, JSON.stringify(value));
+  },
+  removeItem: (name: string) => {
+    localStorage.removeItem(name);
+  },
+};
+
 const useTokenStore = create<TokenState>()(
-  persist(
+  persist<TokenState>(
     (set) => ({
       token: null,
       userType: null,
@@ -24,12 +36,12 @@ const useTokenStore = create<TokenState>()(
       setToken: (token: string, userType: UserType, name: any, datas: any) =>
         set({ token, userType, name, datas }),
       clearToken: () => set({ token: null, userType: null, name: null, datas: [] }),
-      setDatas: (datas: any) => set({ datas }), // Implementation of setDatas
+      setDatas: (datas: any) => set({ datas }),
     }),
     {
-      name: "token-storage", // name of the item in localStorage
-      getStorage: () => localStorage, // use localStorage
-    }
+      name: "token-storage", // Name of the item in storage
+      getStorage: localStorageWrapper as unknown as Storage, // Custom wrapper for localStorage
+    } as PersistOptions<TokenState> // Explicitly type as PersistOptions
   )
 );
 

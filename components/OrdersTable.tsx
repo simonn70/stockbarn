@@ -68,6 +68,25 @@ const handleDeliverOrder = async (orderId: number) => {
     console.error("Error delivering order:", error);
     alert("Failed to mark the order as delivered. Please try again.");
   }
+  };
+  
+  const handleRejectOrder = async (orderId: number) => {
+  try {
+    const response = await axios.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/orders/${orderId}/reject`);
+    // Update the local state to reflect the status change
+    console.log(response);
+    
+    setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.id === orderId ? { ...order, status: "delivered" } : order
+      )
+    );
+    setIsModalOpen(false); // Close the modal after updating
+    alert("Order marked as delivered successfully!");
+  } catch (error) {
+    console.error("Error delivering order:", error);
+    alert("Failed to mark the order as delivered. Please try again.");
+  }
 };
 
   const handleViewOrder = (order: Order) => {
@@ -104,7 +123,7 @@ const handleDeliverOrder = async (orderId: number) => {
           </TableHeader>
           <TableBody>
             {orders.map((order) => (
-              <TableRow key={order.id}>
+              <TableRow key={order._id}>
                 <TableCell className="font-medium">{order._id}</TableCell>
                 <TableCell>{order.customer?.name}</TableCell>
                 <TableCell className="hidden md:table-cell">{order.createdAt}</TableCell>
@@ -139,7 +158,7 @@ const handleDeliverOrder = async (orderId: number) => {
                 </div>
                 <div>
                   <p className="font-semibold">Mobile Number:</p>
-                  <p>{selectedOrder.customer.phoneNumber}</p>
+                  <p>{selectedOrder.customer.phone}</p>
                 </div>
                 <div>
                   <p className="font-semibold">Date:</p>
@@ -174,7 +193,10 @@ const handleDeliverOrder = async (orderId: number) => {
                   ))}
                 </TableBody>
                   <Button  size="sm" onClick={() => selectedOrder && handleDeliverOrder(selectedOrder._id)}>
-                    Deliver
+                    Approve
+                </Button>
+                <Button  size="sm" onClick={() => selectedOrder && handleRejectOrder(selectedOrder._id)}>
+                    Reject
                   </Button>
               </Table>
               <div className="text-right">
