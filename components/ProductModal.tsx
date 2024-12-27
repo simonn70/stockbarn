@@ -14,15 +14,15 @@ import Image from "next/image";
 import { X } from "lucide-react";
 import axios from "axios";
 
-interface Product {
-  id?: number;
-  name: string;
-  price: number;
-  category: string;
-  stock: number;
-  images: string[];
-  description: string;
-}
+// interface Product {
+//   id?: number;
+//   name: string;
+//   price: number;
+//   category: string;
+//   stock: number;
+//   images: string[];
+//   description: string;
+// }
 
 // interface ProductModalProps {
 //   isOpen: boolean;
@@ -56,8 +56,8 @@ export default function ProductModal({
   onClose,
   onSave,
   product,
-}: any) {
-  const [formData, setFormData] = useState<any>({
+}) {
+  const [formData, setFormData] = useState({
     name: "",
     price: 0,
     category: "",
@@ -101,7 +101,7 @@ export default function ProductModal({
     }
   };
 
-  const handleChange = (e:any) => {
+  const handleChange = (e) => {
     const { name, value, type, files } = e.target;
 
     if (type === "file") {
