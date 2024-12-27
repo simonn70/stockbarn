@@ -80,15 +80,6 @@ interface Product {
 export default function ProductPage() {
   const {product}= useTokenStore()
   // const params = useParams()
- const defaultProduct: Product = {
-  name: "",
-  category: "",
-  description: "",
-  price: 0,
-  stock: 0,
-  quantity: 0,
-  images: [], // Empty array to avoid issues with indexing
-};
 
 // Use `datas` if available, otherwise fall back to `defaultProduct`
 // const [product] = useState<Product>(datas );
