@@ -31,7 +31,7 @@ export default function LoginForm() {
       } else {
         router.push('/')
       }
-    } catch (error: any) {
+    } catch (error) {
       const errorMsg = error.response?.data?.msg || 'Login failed. Please try again.'
       setMessage({ text: errorMsg, type: 'error' })
     } finally {
@@ -88,7 +88,7 @@ export default function LoginForm() {
         </form>
 
         <p className="text-center mt-4 text-sm text-gray-500">
-          Don't have an account?{' '}
+          Dont have an account?
           <a href="/sign-up" className="text-blue-500 hover:underline">
             Sign up
           </a>

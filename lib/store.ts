@@ -6,11 +6,11 @@ type UserType = "admin" | "customer" | null;
 interface TokenState {
   token: string | null;
   userType: UserType;
-  name: any;
-  datas: any;
-  setToken: (token: string, userType: UserType, name: any, datas: any) => void;
+  name: string;
+  datas: string[];
+  setToken: (token: string, userType: UserType, name, datas) => void;
   clearToken: () => void;
-  setDatas: (datas: any) => void;
+  setDatas: (datas) => void;
 }
 
 const localStorageWrapper = {
@@ -18,7 +18,7 @@ const localStorageWrapper = {
     const storedValue = localStorage.getItem(name);
     return storedValue ? JSON.parse(storedValue) : null;
   },
-  setItem: (name: string, value: any) => {
+  setItem: (name: string, value) => {
     localStorage.setItem(name, JSON.stringify(value));
   },
   removeItem: (name: string) => {
@@ -33,10 +33,10 @@ const useTokenStore = create<TokenState>()(
       userType: null,
       name: null,
       datas: [],
-      setToken: (token: string, userType: UserType, name: any, datas: any) =>
+      setToken: (token: string, userType: UserType, name, datas) =>
         set({ token, userType, name, datas }),
       clearToken: () => set({ token: null, userType: null, name: null, datas: [] }),
-      setDatas: (datas: any) => set({ datas }),
+      setDatas: (datas) => set({ datas }),
     }),
     {
       name: "token-storage", // Name of the item in storage

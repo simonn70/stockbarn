@@ -29,7 +29,7 @@ console.log(isSessionExpired);
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        const decodedToken: any = jwtDecode(token);
+        const decodedToken = jwtDecode(token);
         const currentTime = Math.floor(Date.now() / 1000);
         const timeout =
           decodedToken.exp - currentTime > 0
@@ -46,10 +46,10 @@ console.log(isSessionExpired);
     }
   }, []);
 
-  const handleSessionExpiredLogout = () => {
-    setIsSessionExpired(false);
-    router.push("/");
-  };
+  // const handleSessionExpiredLogout = () => {
+  //   setIsSessionExpired(false);
+  //   router.push("/");
+  // };
 
   const handleLogout = () => {
     localStorage.removeItem("token");

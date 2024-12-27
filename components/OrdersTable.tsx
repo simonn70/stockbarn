@@ -37,8 +37,8 @@ interface OrderItem {
 }
 
 export default function OrdersTable() {
-  const [orders, setOrders] = useState<any>([])
-  const [selectedOrder, setSelectedOrder] = useState<any>(null)
+  const [orders, setOrders] = useState([])
+  const [selectedOrder, setSelectedOrder] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
    useEffect(() => {
@@ -55,7 +55,7 @@ export default function OrdersTable() {
   }, [])
 const handleDeliverOrder = async (orderId: number) => {
   try {
-    const response = await axios.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/orders/${orderId}/deliver`);
+     await axios.put(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/orders/${orderId}/deliver`);
     // Update the local state to reflect the status change
     setOrders((prevOrders) =>
       prevOrders.map((order) =>

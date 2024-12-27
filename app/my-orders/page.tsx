@@ -38,8 +38,8 @@ interface OrderItem {
 }
 
 export default function OrdersTable() {
-  const [orders, setOrders] = useState<any>([]);
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [orders, setOrders] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const token = localStorage.getItem("token");
 

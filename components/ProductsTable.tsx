@@ -25,7 +25,7 @@ interface Product {
 }
 
 export default function ProductsTable() {
-  const [products, setProducts] = useState<any>([])
+  const [products, setProducts] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
 
@@ -70,7 +70,7 @@ export default function ProductsTable() {
     // send request to backend 
     
       // Send product data to the backend using axios
-      const response = await axios.post(
+       await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/product/create`,
         product,
         {

@@ -14,12 +14,12 @@ export const colors = {
   white: '#FFFFFF',
 };
 
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-}
+// interface CartItem {
+//   id: number;
+//   name: string;
+//   price: number;
+//   quantity: number;
+// }
 
 export function MiniCart() {
   const { cartItems, removeFromCart } = useCartStore();
@@ -27,7 +27,7 @@ export function MiniCart() {
   const [isExpanded, setIsExpanded] = useState(false); // State to track if the cart is expanded
 
   const total = cartItems.reduce(
-    (sum, item: any) => sum + item.price * item.quantity,
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
 

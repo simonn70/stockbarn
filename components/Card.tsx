@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import Link from "next/link";
 import { Plus, Minus, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "../hook/useAuth"; // Importing the useAuth hook
 import useTokenStore from "@/lib/store";
@@ -21,7 +20,7 @@ import { useRouter } from "next/navigation";
 //   description: string;
 // }
 
-export function ProductCard({ product, onAddToCart }: any) {
+export function ProductCard({ product, onAddToCart }) {
   const [quantity, setQuantity] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showLoginModal, setShowLoginModal] = useState(false); // State to show the login modal

@@ -5,7 +5,7 @@ const MONGODB_URL = "mongodb+srv://simonadjei70:fEAzRvC46lfg3rVx@focus.kv1prmo.m
 console.log(MONGODB_URL);
 
 
-const cached = (global as any).mongoose || { conn: null, promise: null }
+const cached = (global).mongoose || { conn: null, promise: null }
 
 export const connectToDB = async () => {
   if (cached.conn) return cached.conn;

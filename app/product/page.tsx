@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useState} from 'react'
+
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
@@ -16,56 +16,56 @@ export const colors = {
 
 
 import Image from 'next/image'
-import { Star, Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react'
+import {  Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { useCartStore } from '@/contexts/CardStore'
 import useTokenStore from '@/lib/store'
 
 
-const products = [
-  { 
-    id: 1, 
-    name: 'Organic Apples', 
-    price: 1.99, 
-    images: [
-      '/placeholder.svg?height=400&width=400&text=Apple+1',
-      '/placeholder.svg?height=400&width=400&text=Apple+2',
-      '/placeholder.svg?height=400&width=400&text=Apple+3'
-    ],
-    unit: 'per lb', 
-    category: 'Fruits & Veggies',
-    description: 'Fresh, crisp organic apples. Perfect for snacking, baking, or adding to your favorite recipes.',
-    nutrition: { calories: 95, protein: 0.5, carbs: 25, fat: 0.3 }
-  },
-  { 
-    id: 2, 
-    name: 'Ripe Bananas', 
-    price: 0.99, 
-    images: [
-      '/placeholder.svg?height=400&width=400&text=Banana+1',
-      '/placeholder.svg?height=400&width=400&text=Banana+2',
-      '/placeholder.svg?height=400&width=400&text=Banana+3'
-    ],
-    unit: 'per lb', 
-    category: 'Fruits & Veggies',
-    description: 'Sweet and creamy bananas, rich in potassium and perfect for smoothies or as a quick snack.',
-    nutrition: { calories: 105, protein: 1.3, carbs: 27, fat: 0.3 }
-  },
-  { 
-    id: 3, 
-    name: 'Fresh Milk', 
-    price: 2.49, 
-    images: [
-      '/placeholder.svg?height=400&width=400&text=Milk+1',
-      '/placeholder.svg?height=400&width=400&text=Milk+2',
-      '/placeholder.svg?height=400&width=400&text=Milk+3'
-    ],
-    unit: 'per gallon', 
-    category: 'Dairy & Eggs',
-    description: 'Creamy, farm-fresh milk. Rich in calcium and perfect for drinking, cooking, or baking.',
-    nutrition: { calories: 103, protein: 8, carbs: 12, fat: 2.4 }
-  },
-]
+// const products = [
+//   { 
+//     id: 1, 
+//     name: 'Organic Apples', 
+//     price: 1.99, 
+//     images: [
+//       '/placeholder.svg?height=400&width=400&text=Apple+1',
+//       '/placeholder.svg?height=400&width=400&text=Apple+2',
+//       '/placeholder.svg?height=400&width=400&text=Apple+3'
+//     ],
+//     unit: 'per lb', 
+//     category: 'Fruits & Veggies',
+//     description: 'Fresh, crisp organic apples. Perfect for snacking, baking, or adding to your favorite recipes.',
+//     nutrition: { calories: 95, protein: 0.5, carbs: 25, fat: 0.3 }
+//   },
+//   { 
+//     id: 2, 
+//     name: 'Ripe Bananas', 
+//     price: 0.99, 
+//     images: [
+//       '/placeholder.svg?height=400&width=400&text=Banana+1',
+//       '/placeholder.svg?height=400&width=400&text=Banana+2',
+//       '/placeholder.svg?height=400&width=400&text=Banana+3'
+//     ],
+//     unit: 'per lb', 
+//     category: 'Fruits & Veggies',
+//     description: 'Sweet and creamy bananas, rich in potassium and perfect for smoothies or as a quick snack.',
+//     nutrition: { calories: 105, protein: 1.3, carbs: 27, fat: 0.3 }
+//   },
+//   { 
+//     id: 3, 
+//     name: 'Fresh Milk', 
+//     price: 2.49, 
+//     images: [
+//       '/placeholder.svg?height=400&width=400&text=Milk+1',
+//       '/placeholder.svg?height=400&width=400&text=Milk+2',
+//       '/placeholder.svg?height=400&width=400&text=Milk+3'
+//     ],
+//     unit: 'per gallon', 
+//     category: 'Dairy & Eggs',
+//     description: 'Creamy, farm-fresh milk. Rich in calcium and perfect for drinking, cooking, or baking.',
+//     nutrition: { calories: 103, protein: 8, carbs: 12, fat: 2.4 }
+//   },
+// ]
 
 
 export default function ProductPage() {

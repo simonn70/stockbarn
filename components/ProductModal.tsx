@@ -24,12 +24,12 @@ interface Product {
   description: string;
 }
 
-interface ProductModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (product: Product) => void;
-  product?: Product | null;
-}
+// interface ProductModalProps {
+//   isOpen: boolean;
+//   onClose: () => void;
+//   onSave: (product: Product) => void;
+//   product?: Product | null;
+// }
 
 const url = `https://api.cloudinary.com/v1_1/dacotr4pz/auto/upload`;
 

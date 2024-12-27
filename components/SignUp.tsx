@@ -43,7 +43,7 @@ export default function SignupForm() {
         router.push('/sign-in');
       }
       console.log(response.data);
-    } catch (error: any) {
+    } catch (error) {
       // Extract message from backend or use a default fallback
       const errorMsg = error.response?.data?.msg || 'Signup failed. Please try again.';
       setMessage({ text: errorMsg, type: 'error' });
