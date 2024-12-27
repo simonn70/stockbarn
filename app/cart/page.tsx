@@ -21,11 +21,13 @@ import { Plus, Minus, Trash2 } from 'lucide-react'
 import { useCartStore } from '@/contexts/CardStore'
 import { Header } from '@/components/Header'
 import axios from 'axios'
+import useTokenStore from '@/lib/store'
 
 
 export default function CartPage() {
   // const router = useRouter()
   const { cartItems, addToCart, removeFromCart } = useCartStore()
+  const {token} = useTokenStore()
   const [userDetails, setUserDetails] = useState({
     name: '',
     email: '',
@@ -67,7 +69,7 @@ const handleCheckout = async (e: React.FormEvent) => {
     };
     
     // Retrieve the token
-    const token = localStorage.getItem('token');
+    
     if (!token) {
       throw new Error('User not authenticated. Please log in.');
     }

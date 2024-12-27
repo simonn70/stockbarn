@@ -43,7 +43,7 @@ export default function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center  from-green-400 via-blue-300 to-green-400">
-      <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-md">
+      <div className="bg-white rounded-lg shadow-md p-6 w-full ">
         <h1 className="text-2xl font-bold text-center mb-4 text-green-600">Welcome Back</h1>
         {message.text && (
           <div
