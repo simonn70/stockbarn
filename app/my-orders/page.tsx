@@ -20,6 +20,7 @@ import { Eye, Package, ShoppingBag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import axios from "axios";
 import { Header } from "@/components/Header";
+import useTokenStore from "@/lib/store";
 
 interface Order {
   id: number;
@@ -41,7 +42,7 @@ export default function OrdersTable() {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const token = localStorage.getItem("token");
+  const {token} = useTokenStore()
 
   useEffect(() => {
     const fetchProducts = async () => {

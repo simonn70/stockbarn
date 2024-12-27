@@ -3,6 +3,7 @@ import { ShoppingCart, Menu, X, LogOut } from "lucide-react"; // Import LogOut i
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useCartStore } from "@/contexts/CardStore";
+import useTokenStore from "@/lib/store";
 
 export const colors = {
   primary: "#4CAF50",
@@ -19,10 +20,11 @@ export function Header() {
   const cartCount = useCartStore((state) => state.cartCount);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const {clearToken,token} = useTokenStore()
 
   useEffect(() => {
     // Check if there's a token in localStorage
-    const token = localStorage.getItem("token");
+    
     setIsAuthenticated(!!token); // Set the authenticated state based on the presence of a token
   }, []);
 
@@ -32,7 +34,7 @@ export function Header() {
 
   const handleLogout = () => {
     // Remove the token from localStorage on logout
-    localStorage.removeItem("token");
+    clearToken()
     setIsAuthenticated(false); // Update the state to reflect the user is logged out
   };
 

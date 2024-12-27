@@ -42,8 +42,8 @@ const useTokenStore = create<TokenState>()(
       userType: null,
       name: null,
       product: null,
-      setToken: (token: string, userType: UserType, name, product) =>
-        set({ token, userType, name, product }),
+      setToken: (token: string) =>
+        set({ token }),
       clearToken: () => set({ token: null, userType: null, name: null, product: null }),
       setDatas: (product) => set({ product }),
     }),

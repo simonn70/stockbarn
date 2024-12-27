@@ -6,12 +6,14 @@ import axios from 'axios'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import useTokenStore from '@/lib/store'
 
 export default function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState({ text: '', type: '' })
+  const {setToken} = useTokenStore()
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,7 +26,7 @@ export default function LoginForm() {
       setLoading(true)
       const response = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/login`, data)
       setMessage({ text: response.data.msg, type: 'success' })
-      localStorage.setItem('token', response.data.token)
+      setToken( response.data.token,response.data.token,response.data.token,response.data.token)
 
       if (response.data.user.role === 'admin') {
         router.push('/dashboard')
