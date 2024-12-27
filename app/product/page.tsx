@@ -21,15 +21,7 @@ import { Header } from '@/components/Header'
 import { useCartStore } from '@/contexts/CardStore'
 import useTokenStore from '@/lib/store'
 
-interface Product {
-  name: string; // Name of the product
-  category: string; // Category the product belongs to
-  description: string; // Description of the product
-  price: number; // Price of the product
-  stock: number; // Available stock of the product
-  quantity: number; // Quantity selected or purchased
-  images: string[]; // Array of image URLs for the product
-}
+
 
 // const products = [
 //   { 
